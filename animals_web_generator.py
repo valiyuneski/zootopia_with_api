@@ -4,38 +4,41 @@ API_URL = "https://api.api-ninjas.com/v1/animals"
 API_KEY = "n7IqvzqjRPFKD7v17+FsDg==ggBAIzwOejjz8ehL"
 
 def fetch_data(animal_name: str) -> list:
-    """Fetch animal information from the API"""
+    """Fetch animal information from the API (raw results)"""
     response = requests.get(
         API_URL,
         headers={"X-Api-Key": API_KEY},
         params={"name": animal_name}
     )
     if response.status_code == 200:
-        return response.json()  # returns a list of results
+        return response.json()  # full list of matches
     else:
         print("Error fetching data:", response.status_code)
         return []
 
-def generate_html(animal_data: list):
-    """Generate an HTML page from the API results"""
-    html_content = """
+def generate_html(animal_data: list, query: str):
+    """Generate an HTML page for the animal(s)"""
+    html_content = f"""
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Animal Info</title>
+        <title>Animal Info - {query}</title>
         <meta charset="UTF-8">
         <style>
-            body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
-            .card { background: white; padding: 20px; margin: 20px auto; border-radius: 10px;
-                    box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 700px; }
-            h1 { color: #2c3e50; }
-            h2 { color: #16a085; }
-            ul { padding-left: 20px; }
+            body {{ font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }}
+            .card {{ background: white; padding: 20px; margin: 20px auto; border-radius: 10px;
+                     box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 700px; }}
+            h1 {{ color: #2c3e50; }}
+            h2 {{ color: #16a085; }}
+            ul {{ padding-left: 20px; }}
         </style>
     </head>
     <body>
-    <h1>Animals Information</h1>
+    <h1>Result for "{query}"</h1>
     """
+
+    if not animal_data:
+        html_content += f"<p>No exact match found for '{query}'.</p>"
 
     for animal in animal_data:
         html_content += f"""
@@ -60,13 +63,17 @@ def generate_html(animal_data: list):
         f.write(html_content)
 
 def main():
-    # Instead of reading JSON file → fetch from API
-    data = fetch_data("Fox")
-    if data:
-        generate_html(data)
-        print("Website was successfully generated to the file animals.html.")
-    else:
-        print("No animal data found.")
+    query = input("Enter a name of an animal: ").strip()
+    
+    # fetch all API results
+    all_results = fetch_data(query)
+    
+    # filter here for exact match only
+    exact_matches = [a for a in all_results if a.get("name", "").lower() == query.lower()]
+    
+    # pass only exact matches to HTML generator
+    generate_html(exact_matches, query)
+    print("Website was successfully generated to the file animals.html.")
 
 if __name__ == "__main__":
     main()
