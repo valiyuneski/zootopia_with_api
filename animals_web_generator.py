@@ -57,5 +57,15 @@ def generate_html(animal_name, info):
         file.write(html_content)
 
 
-animal_name = input("Please enter an animal: ")
-data = data_fetcher.fetch_data(animal_name)
+def main():
+    """Main function to run the program."""
+    animal_name = input("Enter a name of an animal: ").strip()
+    info = data_fetcher.fetch_data(animal_name)
+    if info:
+        generate_html(animal_name, info[0])  # Use the first result
+        print("Website was successfully generated to the file animals.html.")
+    else:
+        print("No data found for that animal.")
+
+if __name__ == "__main__":
+    main()
