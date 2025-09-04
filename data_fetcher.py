@@ -1,27 +1,18 @@
 import requests
 import os
-from dotenv import load_dotenv
 import logging
+from dotenv import load_dotenv
 
-
-API_URL = "https://api.api-ninjas.com/v1/animals"
+load_dotenv()
 
 logging.basicConfig(level=logging.ERROR)
 
-
-
-# Load environment variables once, at import time
-load_dotenv()
-
-def get_api_key():
-    """Retrieve the API key from environment variables."""
-    return os.getenv("API_KEY")
+API_URL = "https://api.api-ninjas.com/v1/animals"
+API_KEY = os.getenv("API_KEY")
 
 
 def fetch_data(animal_name) -> list:
     """Fetch data about the given animal from the API."""
-    API_KEY = get_api_key
-
     if not API_KEY:
         raise ValueError("API_KEY not found! Please set it in the .env file.")
 
