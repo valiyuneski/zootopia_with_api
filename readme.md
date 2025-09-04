@@ -20,4 +20,5 @@ It was built as part of a milestone project to practice working with APIs, error
    ```bash
    git clone https://github.com/valiyuneski/zootopia_with_api.git
    cd zootopia_with_api
-   pip3 install python-dotenv
+   python-dotenv
+   #pip3 install -r requirements.txt
