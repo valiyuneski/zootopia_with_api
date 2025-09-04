@@ -57,6 +57,44 @@ def generate_html(animal_name, info):
         file.write(html_content)
 
 
+def generate_html_no_animal_found():
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>No Data Found</title>
+        <meta charset="UTF-8">
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                background: #f7f7f7;
+                color: #333;
+                margin: 20px;
+                text-align: center;
+            }}
+            .message {{
+                background: white;
+                border-radius: 10px;
+                padding: 20px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                display: inline-block;
+            }}
+            h1 {{
+                color: #e74c3c;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="message">
+            <h1>Animal not found</h1>
+            <p>Please try another animal name.</p>
+        </div>
+    </body>
+    </html>
+    """
+    with open("animals.html", "w", encoding="utf-8") as file:
+        file.write(html_content)
+
 def main():
     """Main function to run the program."""
     animal_name = input("Enter a name of an animal: ").strip()
@@ -65,7 +103,8 @@ def main():
         generate_html(animal_name, info[0])  # Use the first result
         print("Website was successfully generated to the file animals.html.")
     else:
-        print("No data found for that animal.")
+        generate_html_no_animal_found()
+
 
 if __name__ == "__main__":
     main()
